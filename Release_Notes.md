@@ -6,15 +6,15 @@ This example demonstrates how to use the M95M04 part driver with STM32CubeMX2.
 
 # Update history
 
-<label for="collapse-v-1-0-0" aria-hidden="true">**1.0.0 / 21-June-2026**</label>
+<label for="collapse-v-1-0-1" aria-hidden="true">**1.0.1 / 22-July-2026**</label>
 <div>
 
 
 ## Main changes
 
-### First release
+### Patch release
 
-Initial release of the M95M04 eepromrw example for STM32CubeMX2.
+Updated ioc2 file aligned with updated part driver.
 
 ## Known limitations
 
@@ -22,7 +22,7 @@ No limitation raised for this example.
 
 ## Dependencies
 
-Configuration and code generation features require STM32CubeMX2 >= 1.0.0.
+Configuration and code generation features require STM32CubeMX2 >= 1.1.0.
 
 </div>
 

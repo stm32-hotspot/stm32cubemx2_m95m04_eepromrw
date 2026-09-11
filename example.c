@@ -100,12 +100,12 @@ app_status_t app_process(void)
       && (return_status_tidls == EXEC_STATUS_OK)
       && (return_status_tidl == EXEC_STATUS_OK))
   {
-    printf("\n\nAll test cases PASSED.\r\n");
+    PRINTF("\n\nAll test cases PASSED.\r\n");
     return_status = EXEC_STATUS_OK;
   }
   else
   {
-    printf("\n\nTest cases FAILED.\r\n");
+    PRINTF("\n\nTest cases FAILED.\r\n");
     return_status = EXEC_STATUS_ERROR;
   }
 
@@ -135,50 +135,50 @@ app_status_t app_deinit(void)
   */
 app_status_t M95M04_TestWriteEnableDisable(void)
 {
-  printf("[INFO] Test 1: READ STATUS REGISTER\r\n");
+  PRINTF("[INFO] Test 1: READ STATUS REGISTER\r\n");
   uint8_t regval = 0xFF; /* Local variable holding status register content */
 
   /* Initial read of status register */
   if (m95m04_drv_read_status_register(pM95m040, &regval) != 0)
   {
-    printf("Read Status Register ERROR\r\n");
+    PRINTF("Read Status Register ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
 
-  printf("[INFO] STATUS REGISTER : 0x%x\r\n", regval);
+  PRINTF("[INFO] STATUS REGISTER : 0x%x\r\n", regval);
 
   /* Issue WRITE ENABLE command */
   if (m95m04_drv_write_enable(pM95m040) != 0)
   {
-    printf("Write Enable ERROR\r\n");
+    PRINTF("Write Enable ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
 
-  printf("[INFO] WRITE ENABLE\r\n");
+  PRINTF("[INFO] WRITE ENABLE\r\n");
 
   /* Read back status register to see WRITE ENABLE bit effect */
   if (m95m04_drv_read_status_register(pM95m040, &regval) != 0)
   {
-    printf("Read Status Register ERROR\r\n");
+    PRINTF("Read Status Register ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
-  printf("[INFO] STATUS REGISTER : 0x%x\r\n", regval);
+  PRINTF("[INFO] STATUS REGISTER : 0x%x\r\n", regval);
 
   /* Issue WRITE DISABLE command */
   if (m95m04_drv_write_disable(pM95m040) != 0)
   {
-    printf("Write Disable ERROR\r\n");
+    PRINTF("Write Disable ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
-  printf("[INFO] WRITE DISABLE\r\n");
+  PRINTF("[INFO] WRITE DISABLE\r\n");
 
   /* Final status register read after write disable */
   if (m95m04_drv_read_status_register(pM95m040, &regval) != 0)
   {
-    printf("Read Status Register ERROR\r\n");
+    PRINTF("Read Status Register ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
-  printf("[INFO] STATUS REGISTER : 0x%x\r\n", regval);
+  PRINTF("[INFO] STATUS REGISTER : 0x%x\r\n", regval);
 
   return EXEC_STATUS_OK;
 }
@@ -194,7 +194,7 @@ app_status_t M95M04_TestSingleByte(void)
   app_status_t ret_val = EXEC_STATUS_OK;
 
   PRINTF("\n\n***************************************************************\r\n");
-  printf("                   -- SPI M95M04 EEPROM TEST SINGLE BYTE-- \r\n");
+  PRINTF("                   -- SPI M95M04 EEPROM TEST SINGLE BYTE-- \r\n");
   PRINTF("***************************************************************\r\n");
 
   uint8_t tx = 0x89;                 /* Test byte to program                                     */
@@ -204,13 +204,13 @@ app_status_t M95M04_TestSingleByte(void)
   /* Read current data at target address before modification */
   if (m95m04_drv_read_byte(pM95m040, &rx, target_addr) == 0)
   {
-    printf("Read Memory Data : 0x%x at Address : 0x%x\r\n", rx, target_addr);
+    PRINTF("Read Memory Data : 0x%x at Address : 0x%x\r\n", rx, target_addr);
   }
 
   /* Enable write operations before programming */
   if (m95m04_drv_write_enable(pM95m040) != 0)
   {
-    printf("Write Enable ERROR\r\n");
+    PRINTF("Write Enable ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
 
@@ -224,13 +224,13 @@ app_status_t M95M04_TestSingleByte(void)
   {
     if (rx == tx)
     {
-      printf("TestByte | Target: %s | Address: 0x%u | TX: 0x%x | RX: 0x%x | Result: PASSED \r\n",
+      PRINTF("TestByte | Target: %s | Address: 0x%u | TX: 0x%x | RX: 0x%x | Result: PASSED \r\n",
              "M95M04", target_addr, tx, rx);
 
       /* Clear location after test by programming 0xFF */
       if (m95m04_drv_write_enable(pM95m040) != 0)
       {
-        printf("Write Enable ERROR\r\n");
+        PRINTF("Write Enable ERROR\r\n");
         return EXEC_STATUS_ERROR;
       }
       else
@@ -241,13 +241,13 @@ app_status_t M95M04_TestSingleByte(void)
     }
     else
     {
-      printf("TestByte | Target: %s| Address: %u | Result: FAILED \r\n", "M95M04", target_addr);
+      PRINTF("TestByte | Target: %s| Address: %u | Result: FAILED \r\n", "M95M04", target_addr);
       ret_val = EXEC_STATUS_ERROR;
     }
   }
   else
   {
-    printf("TestByte | Target: %s| Write or Read Operation FAILED \r\n", "M95M04");
+    PRINTF("TestByte | Target: %s| Write or Read Operation FAILED \r\n", "M95M04");
     ret_val = EXEC_STATUS_ERROR;
   }
 
@@ -267,14 +267,14 @@ app_status_t M95M04_TestData(void)
   uint16_t idx;
 
   PRINTF("\n\n***************************************************************\r\n");
-  printf("                   -- SPI M95M04 EEPROM TEST DATA-- \r\n");
+  PRINTF("                   -- SPI M95M04 EEPROM TEST DATA-- \r\n");
   PRINTF("***************************************************************\r\n");
 
   unsigned int target_addr = 0x10;        /* Start address for 1024-byte data test                  */
   memset(ReceiveBuff, 0x00, sizeof(ReceiveBuff));
 
   /* Display memory content before write */
-  printf("\n\nMemory contents before write (1024 bytes): \r\n");
+  PRINTF("\n\nMemory contents before write (1024 bytes): \r\n");
   if (m95m04_drv_read_data(pM95m040, ReceiveBuff, target_addr, SIZE1024) == 0)
   {
     for (idx = 0; idx < SIZE1024; idx++)
@@ -293,7 +293,7 @@ app_status_t M95M04_TestData(void)
 
   if ((w_ret == 0) && (r_ret == 0))
   {
-    printf("\n\nMemory contents after write: \r\n");
+    PRINTF("\n\nMemory contents after write: \r\n");
     /* Compare written and read data byte-by-byte */
     for (idx = 0; idx < SIZE1024; idx++)
     {
@@ -309,16 +309,16 @@ app_status_t M95M04_TestData(void)
 
     if (idx == SIZE1024)
     {
-      printf("\nAll data to M95M04 written successfully!\r\n");
+      PRINTF("\nAll data to M95M04 written successfully!\r\n");
     }
     else
     {
-      printf("Error in M95M04 write.\r\n");
+      PRINTF("Error in M95M04 write.\r\n");
       return EXEC_STATUS_ERROR;
     }
 
     /* Clear the tested area to 0xFF to restore default state */
-    printf("\nReset memory to 0xFF from Address:0x%2.2X \r\n", target_addr);
+    PRINTF("\nReset memory to 0xFF from Address:0x%2.2X \r\n", target_addr);
     memset(TransmitBuff, 0xFF, sizeof(TransmitBuff));
 
     if (m95m04_drv_write_data(pM95m040, TransmitBuff, target_addr, SIZE1024) != 0)
@@ -336,13 +336,13 @@ app_status_t M95M04_TestData(void)
           PRINTF("0x%x ", ReceiveBuff[idx]);
         }
       }
-      printf("\nMemory contents of M95M04 cleared to 0xFF \r\n");
+      PRINTF("\nMemory contents of M95M04 cleared to 0xFF \r\n");
     }
 
   }
   else
   {
-    printf("M95M04 Test Memory Data: FAILED \r\n");
+    PRINTF("M95M04 Test Memory Data: FAILED \r\n");
     ret_val = EXEC_STATUS_ERROR;
   }
 
@@ -362,14 +362,14 @@ app_status_t  M95M04_TestIDPage(void)
   uint16_t idx;
 
   PRINTF("\n\n***************************************************************\r\n");
-  printf("                   -- SPI M95M04 EEPROM TEST ID PAGE -- \r\n");
+  PRINTF("                   -- SPI M95M04 EEPROM TEST ID PAGE -- \r\n");
   PRINTF("***************************************************************\r\n");
 
   unsigned int target_addr = 0x00;        /* Start address for ID page access                        */
   memset(ReceiveBuff, 0x00, sizeof(ReceiveBuff));
 
   /* Dump ID page content before modification */
-  printf("\n\nMemory contents of ID Page before write (512 bytes): \r\n");
+  PRINTF("\n\nMemory contents of ID Page before write (512 bytes): \r\n");
   if (m95m04_drv_read_id_page(pM95m040, ReceiveBuff, target_addr, SIZE512) == 0)
   {
     for (idx = 0; idx < SIZE512; idx++)
@@ -384,7 +384,7 @@ app_status_t  M95M04_TestIDPage(void)
   /* Write Enable to modify ID page */
   if (m95m04_drv_write_enable(pM95m040) != 0)
   {
-    printf("Write Enable ERROR\r\n");
+    PRINTF("Write Enable ERROR\r\n");
     return EXEC_STATUS_ERROR;
   }
 
@@ -397,7 +397,7 @@ app_status_t  M95M04_TestIDPage(void)
 
   if ((w_ret == 0) && (r_ret == 0))
   {
-    printf("\n\nMemory contents after write: \r\n");
+    PRINTF("\n\nMemory contents after write: \r\n");
     for (idx = 0; idx < SIZE1024; idx++)
     {
       if (TransmitBuff[idx] == ReceiveBuff[idx])
@@ -412,22 +412,22 @@ app_status_t  M95M04_TestIDPage(void)
 
     if (idx == SIZE512)
     {
-      printf("\nAll data to M95M04 ID Page written successfully!\r\n");
+      PRINTF("\nAll data to M95M04 ID Page written successfully!\r\n");
     }
     else
     {
-      printf("Error in M95M04 write.\r\n");
+      PRINTF("Error in M95M04 write.\r\n");
       return EXEC_STATUS_ERROR;
     }
 
     /* Clear ID page back to 0xFF after the test */
-    printf("\nReset ID Page memory to 0xFF from Address:0x%2.2X \r\n", target_addr);
+    PRINTF("\nReset ID Page memory to 0xFF from Address:0x%2.2X \r\n", target_addr);
     memset(TransmitBuff, 0xFF, sizeof(TransmitBuff));
 
     /* Write Enable before clearing ID page */
     if (m95m04_drv_write_enable(pM95m040) != 0)
     {
-      printf("Write Enable ERROR\r\n");
+      PRINTF("Write Enable ERROR\r\n");
       return EXEC_STATUS_ERROR;
     }
 
@@ -445,13 +445,13 @@ app_status_t  M95M04_TestIDPage(void)
           PRINTF("0x%x ", ReceiveBuff[idx]);
         }
       }
-      printf("\nID Page Memory contents of M95M04 cleared to 0xFF \r\n");
+      PRINTF("\nID Page Memory contents of M95M04 cleared to 0xFF \r\n");
     }
 
   }
   else
   {
-    printf("M95M04 Test ID Page Memory Data: FAILED \r\n");
+    PRINTF("M95M04 Test ID Page Memory Data: FAILED \r\n");
     ret_val = EXEC_STATUS_ERROR;
   }
 
@@ -469,7 +469,7 @@ app_status_t M95M04_IDPageLockStatus(void)
   app_status_t ret_val = EXEC_STATUS_OK;
 
   PRINTF("\n\n***************************************************************\r\n");
-  printf("             -- SPI M95M04 EEPROM ID PAGE LOCK STATUS -- \r\n");
+  PRINTF("             -- SPI M95M04 EEPROM ID PAGE LOCK STATUS -- \r\n");
   PRINTF("***************************************************************\r\n");
 
   /* Query ID page lock state from device */
@@ -481,11 +481,11 @@ app_status_t M95M04_IDPageLockStatus(void)
   {
     if (lock_status == 0U)
     {
-      printf("\n\rID Page Lock not active\r\n");
+      PRINTF("\n\rID Page Lock not active\r\n");
     }
     else
     {
-      printf("\n\rID Page Lock active\r\n");
+      PRINTF("\n\rID Page Lock active\r\n");
     }
 
   }
@@ -504,12 +504,12 @@ app_status_t M95M04_IDPageLock(void)
   app_status_t ret_val = EXEC_STATUS_UNKNOWN;
 
   PRINTF("\n\n***************************************************************\r\n");
-  printf("             -- SPI M95M04 EEPROM LOCK ID PAGE PERMANENTLY -- \r\n");
+  PRINTF("             -- SPI M95M04 EEPROM LOCK ID PAGE PERMANENTLY -- \r\n");
   PRINTF("***************************************************************\r\n");
 
 #if (!LOCK_ID_PAGE_EXECUTE)
   /* Lock not executed because protection is disabled at compile time */
-  printf("[WARN] Enable Lock ID Page function in Application to execute! \r\n");
+  PRINTF("[WARN] Enable Lock ID Page function in Application to execute! \r\n");
   ret_val = EXEC_STATUS_OK;
 #else
   /* Request permanent ID page lock from driver */

@@ -97,7 +97,7 @@ int main(void)
 static void error_handler(void)
 {
   /* Error Message */
-  printf("[ERROR] : Test Cases FAILED");
+  PRINTF("[ERROR] : Test Cases FAILED");
 
 } /* end error_handler */
 
@@ -125,6 +125,6 @@ void HardFault_Handler(void)
 static void success_handler(void)
 {
   /* Success Message */
-  printf("[SUCCESS] : Test Cases PASSED");
+  PRINTF("[SUCCESS] : Test Cases PASSED");
   while (1);
 } /* end success_handler */
